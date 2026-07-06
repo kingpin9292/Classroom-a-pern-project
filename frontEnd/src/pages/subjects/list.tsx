@@ -58,7 +58,7 @@ const SubjectList = () => {
       [],
     ),
     refineCoreProps: {
-      resource: "subejcts",
+      resource: "subjects",
       pagination: { pageSize: 10, mode: "server" },
       filters: {
         permanent: [...departmentFilters, ...searchFilters],
