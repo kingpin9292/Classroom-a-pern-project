@@ -18,11 +18,12 @@ router.get("/", async (req, res) => {
     const filterConditions = [];
     //if search query exists, filter by name or subject code
     if (search) {
-      filterConditions.push(or(ilike(subjects.name, `%${search}%`)), ilike(subjects.code, `%${search}%`));
+      filterConditions.push(or(ilike(subjects.name, `%${search}%`), ilike(subjects.code, `%${search}%`)));
     }
     //if department filter exists, match department name
     if (department) {
-      filterConditions.push(ilike(departments.name, `%${department}%`));
+      const deptPattern = `%${String(department).replace(/[%_]/g, "\\$&")}%`;
+      filterConditions.push(ilike(departments.name, deptPattern));
     }
     //combine all filters using AND if any exists
     const whereClause = filterConditions.length > 0 ? and(...filterConditions) : undefined;
