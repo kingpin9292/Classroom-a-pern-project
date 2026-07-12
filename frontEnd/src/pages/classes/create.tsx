@@ -17,7 +17,6 @@ import { classSchema } from "@/lib/schema";
 import UploadWidget from "@/components/upload-widget";
 import { Subject, User } from "@/types";
 import z from "zod";
-import { p } from "node_modules/react-router/dist/development/index-react-server-client-CACgcj2J.d.mts";
 
 const ClassesCreate = () => {
   const back = useBack();
@@ -64,6 +63,44 @@ const ClassesCreate = () => {
       console.error("Error creating class:", error);
     }
   };
+  const subjectsLoading = "";
+  const teachersLoading = "";
+  const subjects = [
+    {
+      id: 1,
+      name: "Mathematics",
+      code: "MATH",
+    },
+    {
+      id: 2,
+      name: "Computer Science",
+      code: "CS",
+    },
+    {
+      id: 3,
+      name: "Physics",
+      code: "PHY",
+    },
+    {
+      id: 4,
+      name: "Chemistry",
+      code: "CHEM",
+    },
+  ];
+  const teachers = [
+    {
+      id: "1",
+      name: "John Doe",
+    },
+    {
+      id: "2",
+      name: "Jane Smith",
+    },
+    {
+      id: "3",
+      name: "Dr. Alan Turing",
+    },
+  ];
 
   return (
     <CreateView className="class-view">
