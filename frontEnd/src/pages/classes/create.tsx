@@ -136,7 +136,7 @@ const ClassesCreate = () => {
                       <FormControl>
                         <UploadWidget
                           value={field.value ? { url: field.value, publicId: bannerPublicId ?? "" } : null}
-                          onChange={(file: any, field: any) => setBannerImage(file, field)}
+                          onChange={(file: any) => setBannerImage(file, field)}
                         />
                       </FormControl>
                       <FormMessage />

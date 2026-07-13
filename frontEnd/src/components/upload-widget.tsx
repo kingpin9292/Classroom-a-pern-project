@@ -25,10 +25,10 @@ const UploadWidget = ({ value = null, onChange, disabled = false }) => {
       widgetRef.current = window.cloudinary.createUploadWidget(
         {
           cloudName: CLOUDINARY_CLOUD_NAME,
-          UploadPreset: CLOUDINARY_UPLOAD_PRESET,
+          uploadPreset: CLOUDINARY_UPLOAD_PRESET,
           multiple: false,
           folder: "uploads",
-          MAX_FILE_SIZE: 5000000,
+          maxFileSize: 5000000,
           clientAllowedFormats: ["png", "jpg", "jpeg", "webp"],
         },
         (error, result) => {
@@ -60,7 +60,9 @@ const UploadWidget = ({ value = null, onChange, disabled = false }) => {
   return (
     <div className="space-y-2">
       {preview ? (
-        <div className="upload-preview"></div>
+        <div className="upload-preview">
+          <img src={preview.url} alt="Uploaded file" />
+        </div>
       ) : (
         <div
           className="upload-dropzone"
