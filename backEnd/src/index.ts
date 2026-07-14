@@ -1,6 +1,7 @@
 import express from "express";
 import subjectsRouter from "./routes/subjects.js";
 import cors from "cors";
+import securityMiddleware from "./middleware/security.js";
 const app = express();
 const port = 8000;
 
@@ -15,6 +16,8 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(securityMiddleware); // Apply the security middleware to all routes
+
 app.use("/api/subjects", subjectsRouter);
 
 app.get("/", (req, res) => {
