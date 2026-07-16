@@ -1,11 +1,14 @@
 import arcjet, { shield, detectBot, slidingWindow } from "@arcjet/node";
+import dotenv from "dotenv";
+dotenv.config();
+const key = process.env.ARCJET_KEY?.trim();
 
-if (!process.env.ARCJET_KEY && process.env.NODE_ENV !== "test") {
+if (!key && process.env.NODE_ENV !== "test") {
   throw new Error("ARCJET_KEY env is required");
 }
 
 const aj = arcjet({
-  key: process.env.ARCJET_KEY!,
+  key: key!,
   rules: [
     shield({ mode: "LIVE" }),
     detectBot({
