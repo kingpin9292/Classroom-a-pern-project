@@ -40,6 +40,15 @@ const ClassesCreate = () => {
   } = form;
 
   const bannerPublicId = form.watch("bannerCldPubId");
+
+  const onSubmit = async (values: z.infer<typeof classSchema>) => {
+    try {
+      await onFinish(values);
+    } catch (error) {
+      console.error("Error creating class:", error);
+    }
+  };
+
   const setBannerImage = (file: any, field: any) => {
     if (file) {
       field.onChange(file.url);
@@ -56,51 +65,33 @@ const ClassesCreate = () => {
     }
   };
 
-  const onSubmit = async (values: z.infer<typeof classSchema>) => {
-    try {
-      await onFinish(values);
-    } catch (error) {
-      console.error("Error creating class:", error);
-    }
-  };
-  const subjectsLoading = "";
-  const teachersLoading = "";
-  const subjects = [
-    {
-      id: 1,
-      name: "Mathematics",
-      code: "MATH",
+  //fetch subjects list
+  const { query: subjectsQuery } = useList<Subject>({
+    resource: "subjects",
+    pagination: {
+      pageSize: 100,
     },
-    {
-      id: 2,
-      name: "Computer Science",
-      code: "CS",
+  });
+
+  const { query: teachersQuery } = useList<User>({
+    resource: "users",
+    filters: [
+      {
+        field: "role",
+        operator: "eq",
+        value: "teacher",
+      },
+    ],
+    pagination: {
+      pageSize: 100,
     },
-    {
-      id: 3,
-      name: "Physics",
-      code: "PHY",
-    },
-    {
-      id: 4,
-      name: "Chemistry",
-      code: "CHEM",
-    },
-  ];
-  const teachers = [
-    {
-      id: "1",
-      name: "John Doe",
-    },
-    {
-      id: "2",
-      name: "Jane Smith",
-    },
-    {
-      id: "3",
-      name: "Dr. Alan Turing",
-    },
-  ];
+  });
+
+  const teachers = teachersQuery.data?.data || [];
+  const teachersLoading = teachersQuery.isLoading;
+
+  const subjects = subjectsQuery.data?.data || [];
+  const subjectsLoading = subjectsQuery.isLoading;
 
   return (
     <CreateView className="class-view">
@@ -135,7 +126,7 @@ const ClassesCreate = () => {
                       </FormLabel>
                       <FormControl>
                         <UploadWidget
-                          value={field.value ? { url: field.value, publicId: bannerPublicId ?? "" } : null}
+                          value={field.value ? ({ url: field.value, publicId: bannerPublicId ?? "" } as any) : null}
                           onChange={(file: any) => setBannerImage(file, field)}
                         />
                       </FormControl>

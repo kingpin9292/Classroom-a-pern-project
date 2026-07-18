@@ -103,7 +103,7 @@ const SubjectsCreate = () => {
                       </FormLabel>
                       <Select
                         onValueChange={(value) => field.onChange(Number(value))}
-                        value={field.value ? String(field.value) : ""}
+                        value={String(field.value ?? "")}
                         disabled={departmentsLoading}
                       >
                         <FormControl>
