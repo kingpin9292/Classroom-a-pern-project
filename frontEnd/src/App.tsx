@@ -16,6 +16,7 @@ import SubjectList from "./pages/subjects/list";
 import SubjectsCreate from "./pages/subjects/create";
 import ClassList from "./pages/classes/list";
 import ClassesCreate from "./pages/classes/create";
+import ClassesShow from "./pages/classes/show";
 import { dataProvider } from "./providers/data";
 
 function App() {
@@ -67,6 +68,7 @@ function App() {
                   name: "classes",
                   list: "/classes",
                   create: "/classes/create",
+                  show: "/classes/:id",
                   meta: {
                     label: "Classes",
                     icon: <GraduationCap />,
@@ -90,6 +92,7 @@ function App() {
                   <Route path="classes">
                     <Route index element={<ClassList />} />
                     <Route path="create" element={<ClassesCreate />} />
+                    <Route path="show/:id" element={<ClassesShow />} />
                   </Route>
                 </Route>
               </Routes>

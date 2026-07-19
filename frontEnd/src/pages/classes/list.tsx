@@ -3,7 +3,14 @@ import { Badge } from "@/components/ui/badge";
 import { useMemo, useState } from "react";
 import { ShowButton } from "@/components/refine-ui/buttons/show";
 import { useList } from "@refinedev/core";
+import { useTable } from "@refinedev/react-table";
 import { Subject, User } from "@/types";
+import { ListView } from "@/components/refine-ui/views/list-view";
+import { Breadcrumb } from "@/components/refine-ui/layout/breadcrumb";
+import { Search } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CreateButton } from "@/components/refine-ui/buttons/create";
+import { DataTable } from "@/components/refine-ui/data-table/data-table";
 
 type ClassListItem = {
   id: number;
@@ -24,7 +31,7 @@ const ClassesList = () => {
   const [selectedSubject, setSelectedSubject] = useState<string>("all");
   const [selectedTeacher, setSelectedTeacher] = useState<string>("all");
 
-  const classColumn = useMemo<ColumnDef<ClassListItem>[]>(
+  const classColumns = useMemo<ColumnDef<ClassListItem>[]>(
     () => [
       {
         id: "banner",
@@ -112,7 +119,7 @@ const ClassesList = () => {
         size: 140,
         header: () => <p className="column-title">Details</p>,
         cell: ({ row }) => {
-          <ShowButton resource="classes" recordItemId={row.original.id} variant="outline" className="sm">
+          <ShowButton resource="classes" recordItemId={row.original.id} variant="outline" size="sm">
             View
           </ShowButton>;
         },
@@ -145,7 +152,7 @@ const ClassesList = () => {
   const subjects = subjectsQuery.data?.data || [];
   const teachers = teachersQuery.data?.data || [];
 
-  const subejectFilters =
+  const subjectFilters =
     selectedSubject === "all"
       ? []
       : [
@@ -177,7 +184,73 @@ const ClassesList = () => {
       ]
     : [];
 
-  return <div>list</div>;
+  const classesTable = useTable<ClassListItem>({
+    columns: classColumns,
+    refineCoreProps: {
+      resource: "classes",
+      pagination: {
+        pageSize: 10,
+        mode: "server",
+      },
+      filters: {
+        // Compose refine filters from the current UI selections.
+        permanent: [...subjectFilters, ...teacherFilters, ...searchFilters],
+      },
+      sorters: {
+        initial: [
+          {
+            field: "id",
+            order: "desc",
+          },
+        ],
+      },
+    },
+  });
+
+  return (
+    <ListView>
+      <Breadcrumb />
+      <h1 className="page-title">Classes</h1>
+
+      <div className="intro-row">
+        <p>Quick access to essential metrics and management tools.</p>
+
+        <div className="actions-row">
+          <div className="search-field">
+            <Search className="search-icon" />
+            <input
+              type="text"
+              placeholder="Seacrh-icon"
+              className="pl-10 w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          <div className="flex gap-2 w-full sm:w-auto">
+            <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+              <SelectTrigger>
+                <SelectValue placeholder="Filter by subject" />
+              </SelectTrigger>
+
+              <SelectContent>
+                <SelectItem value="all">All Subjects</SelectItem>
+                {subjects.map((subject) => (
+                  <SelectItem key={subject.id} value={subject.name}>
+                    {subject.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <CreateButton resource="classes" />
+          </div>
+        </div>
+      </div>
+
+      <DataTable table={classesTable} />
+    </ListView>
+  );
 };
 
-export default list;
+export default ClassesList;

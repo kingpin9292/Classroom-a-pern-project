@@ -1,6 +1,6 @@
 import express from "express";
 import { db } from "../db";
-import { classes, subjects, user } from "../db/schema/index";
+import { classes, departments, subjects, user } from "../db/schema/index";
 import { error } from "node:console";
 import { and, eq, getTableColumns, ilike, or, sql, desc } from "drizzle-orm";
 
@@ -20,7 +20,7 @@ router.post("/", async (require, res) => {
     res.status(500).json({ error: error });
   }
 });
-
+// Get all classes with optional search, subject, teacher filters, and pagination
 router.get("/", async (req, res) => {
   const { search, subject, teacher, page = 1, limit = 10 } = req.query;
   const currentPage = Math.max(1, parseInt(String(page), 10) || 1);
@@ -79,6 +79,37 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.log("GET /classes error:", error);
     res.status(500).json({ error: "Failed to fetch classes" });
+  }
+});
+
+// Get class details with counts
+router.get("/:id", async (req, res) => {
+  try {
+    const classId = Number(req.params.id);
+
+    if (!Number.isFinite(classId)) {
+      return res.status(400).json({ error: "Invalid class id" });
+    }
+
+    const [classDetails] = await db
+      .select({
+        ...getTableColumns(classes),
+        subject: { ...getTableColumns(subjects) },
+        department: { ...getTableColumns(departments) },
+        teacher: { ...getTableColumns(user) },
+      })
+      .from(classes)
+      .leftJoin(subjects, eq(classes.subjectId, subjects.id))
+      .leftJoin(departments, eq(subjects.departmentId, departments.id))
+      .leftJoin(user, eq(classes.teacherId, user.id))
+      .where(eq(classes.id, classId));
+
+    if (!classDetails) return res.status(404).json({ error: "Class not found" });
+
+    res.status(200).json({ data: classDetails });
+  } catch (error) {
+    console.error("GET /classes/:id error:", error);
+    res.status(500).json({ error: "Failed to fetch class" });
   }
 });
 
