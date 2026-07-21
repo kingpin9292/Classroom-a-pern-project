@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { useMemo, useState } from "react";
-import { ShowButton } from "@/components/refine-ui/buttons/show";
+import { ShowButton } from "@/components/refine-ui/buttons/show.tsx";
 import { useList } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { Subject, User } from "@/types";
@@ -118,11 +118,11 @@ const ClassesList = () => {
         id: "details",
         size: 140,
         header: () => <p className="column-title">Details</p>,
-        cell: ({ row }) => {
+        cell: ({ row }) => (
           <ShowButton resource="classes" recordItemId={row.original.id} variant="outline" size="sm">
             View
-          </ShowButton>;
-        },
+          </ShowButton>
+        ),
       },
     ],
     [],

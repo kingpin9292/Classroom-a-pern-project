@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
 
   try {
     if (search) {
-      filterConditions.push(or(ilike(classes.name, `%${search}%`)), ilike(classes.inviteCode, `%${search}%`));
+      filterConditions.push(or(ilike(classes.name, `%${search}%`), ilike(classes.inviteCode, `%${search}%`)));
     }
 
     if (subject) {
