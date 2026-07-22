@@ -4,11 +4,13 @@ import { useShow } from "@refinedev/core";
 import { useParams } from "react-router";
 import { boolean } from "zod";
 import { AdvancedImage } from "@cloudinary/react";
-// import { bannerPhoto } from "@/lib/cloudinary";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { bannerPhoto } from "@/lib/cloudinary";
+import { Divide } from "lucide-react";
 
 type ClassUser = {
   id: string;
@@ -49,10 +51,19 @@ const ClassesShow = () => {
     .join("");
 
   const placeholderUrl = `https://placehold.co/600x400?text=${encodeURIComponent(teacherInitials || "NA")}`;
+  const { name, description, status, capacity, bannerUrl, bannerCldPubId, subject, teacher, department } = classDetails;
 
   return (
     <ShowView className="class-view class-show space-y-6">
       <ShowViewHeader resource="classes" title="Class details" />
+
+      <div className="banner">
+        {bannerPhoto ? (
+          <AdvancedImage alt="Class banner" cldImg={bannerPhoto(bannerCldPubId ?? "", name)} />
+        ) : (
+          <div className="placeholder" />
+        )}
+      </div>
 
       <Card className="details-card">
         {/*class details */}

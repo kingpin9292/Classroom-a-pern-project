@@ -3,12 +3,52 @@ import express from "express";
 import { departments, subjects } from "../db/schema/app.js";
 import { db } from "../db";
 const router = express.Router();
+router.post("/", async (req, res) => {
+    try {
+        const { departmentId, name, code, description } = req.body ?? {};
+        const normalizedDepartmentId = Number(departmentId);
+        const normalizedName = typeof name === "string" ? name.trim() : "";
+        const normalizedCode = typeof code === "string" ? code.trim() : "";
+        const normalizedDescription = typeof description === "string" ? description.trim() : "";
+        if (!Number.isInteger(normalizedDepartmentId) ||
+            normalizedDepartmentId < 1 ||
+            normalizedName.length < 3 ||
+            normalizedCode.length < 3 ||
+            normalizedDescription.length < 5) {
+            return res.status(400).json({ error: "Please provide a valid department, name, code, and description." });
+        }
+        const [department] = await db
+            .select({ id: departments.id })
+            .from(departments)
+            .where(eq(departments.id, normalizedDepartmentId));
+        if (!department)
+            return res.status(404).json({ error: "Department not found." });
+        const [subject] = await db
+            .insert(subjects)
+            .values({
+            departmentId: normalizedDepartmentId,
+            name: normalizedName,
+            code: normalizedCode,
+            description: normalizedDescription,
+        })
+            .returning();
+        return res.status(201).json({ data: subject });
+    }
+    catch (err) {
+        const code = typeof err === "object" && err !== null && "code" in err ? err.code : undefined;
+        if (code === "23505") {
+            return res.status(409).json({ error: "A subject with this code already exists." });
+        }
+        console.error("POST /subjects error:", err);
+        return res.status(500).json({ error: "Failed to create subject." });
+    }
+});
 // get all subjects with optional search, filtering and pagination
 router.get("/", async (req, res) => {
     try {
         const { search, department, page = 1, limit = 10 } = req.query;
         const currentPage = Math.max(1, parseInt(String(page), 10) || 1);
-        const limitPerPage = Math.min(Math.max(1, parseInt(String(page), 10) || 10), 100); //Max 100 records per page
+        const limitPerPage = Math.min(Math.max(1, parseInt(String(limit), 10) || 10), 100); //Max 100 records per page
         const offset = (currentPage - 1) * limitPerPage;
         const filterConditions = [];
         //if search query exists, filter by name or subject code

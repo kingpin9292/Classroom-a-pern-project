@@ -5,6 +5,24 @@ import { db } from "../db";
 
 const router = express.Router();
 
+router.post("/", async (req, res) => {
+  try {
+    const { departmentId, name, code, description } = req.body;
+
+    const [createdSubject] = await db
+      .insert(subjects)
+      .values({ departmentId, name, code, description })
+      .returning({ id: subjects.id });
+
+    if (!createdSubject) throw Error;
+
+    res.status(201).json({ data: createdSubject });
+  } catch (error) {
+    console.error("POST /subjects error:", error);
+    res.status(500).json({ error: "Failed to create subject" });
+  }
+});
+
 // get all subjects with optional search, filtering and pagination
 router.get("/", async (req, res) => {
   try {
@@ -12,7 +30,7 @@ router.get("/", async (req, res) => {
 
     const currentPage = Math.max(1, parseInt(String(page), 10) || 1);
 
-    const limitPerPage = Math.min(Math.max(1, parseInt(String(page), 10) || 10), 100); //Max 100 records per page
+    const limitPerPage = Math.min(Math.max(1, parseInt(String(limit), 10) || 10), 100); //Max 100 records per page
 
     const offset = (currentPage - 1) * limitPerPage;
 
