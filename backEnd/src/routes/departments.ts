@@ -1,10 +1,11 @@
 import express from "express";
-export const router = express.Router();
 import { getTableColumns, ilike, or, sql, eq, desc, and } from "drizzle-orm";
 import { classes, departments, enrollments, subjects } from "../db/schema/app";
 import { db } from "../db";
 import { error } from "node:console";
 import { user } from "../db/schema";
+
+const router = express.Router();
 
 // Get all departments with optional search and pagination
 router.get("/", async (req, res) => {
