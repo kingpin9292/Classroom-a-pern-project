@@ -1,4 +1,5 @@
 import { CreateButton } from "@/components/refine-ui/buttons/create";
+import { ShowButton } from "@/components/refine-ui/buttons/show";
 import { DataTable } from "@/components/refine-ui/data-table/data-table";
 import { Breadcrumb } from "@/components/refine-ui/layout/breadcrumb";
 import { ListView } from "@/components/refine-ui/views/list-view";
@@ -52,6 +53,19 @@ const SubjectList = () => {
         size: 300,
         header: () => <p className="column-title">Description</p>,
         cell: ({ getValue }) => <span className="truncate line-clamp-2">{getValue<string>()}</span>,
+      },
+
+      {
+        id: "details",
+        size: 140,
+        header: () => <p className="column-title">Details</p>,
+        cell: ({ row }) => {
+          return (
+            <ShowButton resource="subjects" recordItemId={row.original.id} variant="outline" size="sm">
+              View
+            </ShowButton>
+          );
+        },
       },
     ],
     [],
