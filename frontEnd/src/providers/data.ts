@@ -39,6 +39,10 @@ const options: CreateDataProviderOptions = {
           if (field === "department") params.department = value;
           if (field === "name" || field === "code") params.search = value;
         }
+
+        if (resource.endsWith("/users") && field === "role") {
+          params.role = value;
+        }
       });
       return params;
     },
@@ -72,6 +76,7 @@ const options: CreateDataProviderOptions = {
     getEndpoint: ({ resource, id }) => `${resource}/${id}`,
 
     mapResponse: async (response) => {
+      if (!response.ok) throw await buildHttpError(response);
       const json: GetOneResponse = await response.json();
       return json.data ?? {};
     },

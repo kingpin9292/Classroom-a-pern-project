@@ -1,11 +1,13 @@
 import { ShowButton } from "@/components/refine-ui/buttons/show";
+import { ShowView, ShowViewHeader } from "@/components/refine-ui/views/show-view";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Department, Subject } from "@/types";
 import { useLink, useShow } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
-
+import { DataTable } from "@/components/refine-ui/data-table/data-table";
 import { useMemo } from "react";
 import { useParams } from "react-router";
 
@@ -39,13 +41,14 @@ type SubjectUser = {
   image?: string | null;
 };
 
-const SubjectShow = () => {
+const SubjectsShow = () => {
   const Link = useLink();
   const { id } = useParams();
   const subjectId = id ?? "";
 
   const { query } = useShow<SubjectDetails>({
     resource: "subjects",
+    id: subjectId,
   });
 
   const details = query.data?.data;
@@ -71,14 +74,14 @@ const SubjectShow = () => {
           }
 
           return (
-            <div className="flex item-center gap-2">
+            <div className="flex items-center gap-2">
               <Avatar className="size-7">
                 {teacher.image && <AvatarImage src={teacher.image} alt={teacher.name} />}
                 <AvatarFallback>{getInitials(teacher.name)}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col truncate">
                 <span className="truncate">{teacher.name}</span>
-                <span className="text-xs text-muted-foreground truncate"></span>
+                <span className="text-xs text-muted-foreground truncate">{teacher.email}</span>
               </div>
             </div>
           );
@@ -99,11 +102,11 @@ const SubjectShow = () => {
         id: "details",
         size: 140,
         header: () => <p className="column-title">Details</p>,
-        cell: ({ row }) => {
+        cell: ({ row }) => (
           <ShowButton resource="classes" recordItemId={row.original.id} variant="outline" size="sm">
             View
-          </ShowButton>;
-        },
+          </ShowButton>
+        ),
       },
     ],
     [],
@@ -167,7 +170,7 @@ const SubjectShow = () => {
   const teachersTable = useTable<SubjectUser>({
     columns: userColumns,
     refineCoreProps: {
-      resource: `/subjects/${subjectId}/users`,
+      resource: `subjects/${subjectId}/users`,
       pagination: {
         pageSize: 10,
         mode: "server",
@@ -197,6 +200,91 @@ const SubjectShow = () => {
       },
     },
   });
+
+  if (query.isLoading || query.isError || !details) {
+    return (
+      <ShowView className="class-view">
+        <ShowViewHeader resource="subjects" title="Subject Details" />
+        <p className="text-sm text-muted-foreground">
+          {query.isLoading
+            ? "Loading subject details..."
+            : query.isError
+            ? "Failed to load subject details."
+            : "Subject details not found."}
+        </p>
+      </ShowView>
+    );
+  }
+
+  return (
+    <ShowView className="class-view space-y-6">
+      <ShowViewHeader resource="subjects" title={details.subject.name} />
+
+      <Card className="hover:shadow-md transition-shadow">
+        <CardHeader className="flex w-full flex-row items-center justify-between">
+          <CardTitle>Subject Overview</CardTitle>
+          <Badge variant="secondary">{details.subject.code}</Badge>
+        </CardHeader>
+
+        <CardContent className="space-y-3">
+          <p className="text-sm text-muted-foreground">{details.subject.description ?? "No description provided."}</p>
+        </CardContent>
+      </Card>
+
+      <Card className="hover:shadow-md transition-shadow">
+        <CardHeader>
+          <CardTitle>Department</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          {details.subject.department ? (
+            <>
+              <Link
+                to={`/departments/show/${details.subject.department.id}`}
+                className="text-lg font-semibold text-foreground hover:underline"
+              >
+                {details.subject.department.name}
+              </Link>
+              <p className="text-sm text-muted-foreground">
+                {details.subject.department.description ?? "No department description provided."}
+              </p>
+            </>
+          ) : (
+            <p className="text-sm text-muted-foreground">Department not assigned.</p>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card className="hover:shadow-md transition-shadow">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Classes</CardTitle>
+          <Badge variant="secondary">{details.totals.classes}</Badge>
+        </CardHeader>
+        <CardContent>
+          <DataTable table={classesTable} />
+        </CardContent>
+      </Card>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card className="hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Teachers</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <DataTable table={teachersTable} />
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Students</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <DataTable table={studentsTable} />
+          </CardContent>
+        </Card>
+      </div>
+    </ShowView>
+  );
 };
 
 const getInitials = (name = "") => {
@@ -205,3 +293,5 @@ const getInitials = (name = "") => {
   if (parts.length === 1) return parts[0][0]?.toUpperCase() ?? "";
   return `${parts[0][0] ?? ""}${parts[parts.length - 1][0] ?? ""}`.toUpperCase();
 };
+
+export default SubjectsShow;

@@ -238,7 +238,7 @@ router.get("/:id/users", async (req, res) => {
     const countResult =
       role === "teacher"
         ? await db
-            .select({ count: sql<number>`count(distinct${user.id})` })
+            .select({ count: sql<number>`count(distinct ${user.id})` })
             .from(user)
             .leftJoin(classes, eq(user.id, classes.teacherId))
             .where(and(eq(user.role, role), eq(classes.subjectId, subjectId)))
