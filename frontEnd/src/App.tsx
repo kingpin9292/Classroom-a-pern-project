@@ -22,6 +22,8 @@ import SubjectsShow from "./pages/subjects/show";
 import DepartmentsCreate from "./pages/departments/create";
 import DepartmentsList from "./pages/departments/list";
 
+import DepartmentsShow from "./pages/departments/show";
+
 function App() {
   return (
     <BrowserRouter>
@@ -102,6 +104,7 @@ function App() {
                   <Route path="departments">
                     <Route index element={<DepartmentsList />} />
                     <Route path="create" element={<DepartmentsCreate />} />
+                    <Route path="show/:id" element={<DepartmentsShow />} />
                   </Route>
                 </Route>
               </Routes>
