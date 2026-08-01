@@ -239,6 +239,7 @@ const DepartmentsShow = () => {
     ],
     [],
   );
+
   const subjectsTable = useTable<DepartmentSubject>({
     columns: subjectColumns,
     refineCoreProps: {
@@ -264,7 +265,7 @@ const DepartmentsShow = () => {
   const teachersTable = useTable<DepartmentUser>({
     columns: userColumns,
     refineCoreProps: {
-      resource: `departsments/${departmentId}/users`,
+      resource: `departments/${departmentId}/users`,
       pagination: {
         pageSize: 10,
         mode: "server",
@@ -278,7 +279,7 @@ const DepartmentsShow = () => {
   const studentsTable = useTable<DepartmentUser>({
     columns: userColumns,
     refineCoreProps: {
-      resource: `departsments/${departmentId}/users`,
+      resource: `departments/${departmentId}/users`,
       pagination: {
         pageSize: 10,
         mode: "server",

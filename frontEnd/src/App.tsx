@@ -9,7 +9,7 @@ import { Toaster } from "./components/refine-ui/notification/toaster";
 import { useNotificationProvider } from "./components/refine-ui/notification/use-notification-provider";
 import { ThemeProvider } from "./components/refine-ui/theme/theme-provider";
 
-import { BookOpen, Building2, GraduationCap, Home } from "lucide-react";
+import { BookOpen, Building2, ClipboardCheck, GraduationCap, Home } from "lucide-react";
 import { Layout } from "./components/refine-ui/layout/layout";
 import Dashboard from "./pages/dashboard";
 import SubjectList from "./pages/subjects/list";
@@ -23,6 +23,8 @@ import DepartmentsCreate from "./pages/departments/create";
 import DepartmentsList from "./pages/departments/list";
 
 import DepartmentsShow from "./pages/departments/show";
+import EnrollmentConfirm from "./pages/enrollments/confirm";
+import EnrollmentCreate from "./pages/enrollments/create";
 
 function App() {
   return (
@@ -71,6 +73,16 @@ function App() {
                 },
 
                 {
+                  name: "enrollments",
+                  list: "/enrollments/create",
+                  create: "/enrollments/create",
+                  meta: {
+                    label: "Enrollments",
+                    icon: <ClipboardCheck />,
+                  },
+                },
+
+                {
                   name: "classes",
                   list: "/classes",
                   create: "/classes/create",
@@ -96,15 +108,23 @@ function App() {
                     <Route path="create" element={<SubjectsCreate />} />
                     <Route path="show/:id" element={<SubjectsShow />} />
                   </Route>
-                  <Route path="classes">
-                    <Route index element={<ClassList />} />
-                    <Route path="create" element={<ClassesCreate />} />
-                    <Route path="show/:id" element={<ClassesShow />} />
-                  </Route>
+
                   <Route path="departments">
                     <Route index element={<DepartmentsList />} />
                     <Route path="create" element={<DepartmentsCreate />} />
                     <Route path="show/:id" element={<DepartmentsShow />} />
+                  </Route>
+
+                  <Route path="enrollments">
+                    <Route path="create" element={<EnrollmentCreate />} />
+                    {/* <Route path="join" element={} /> */}
+                    <Route path="confirm" element={<EnrollmentConfirm />} />
+                  </Route>
+
+                  <Route path="classes">
+                    <Route index element={<ClassList />} />
+                    <Route path="create" element={<ClassesCreate />} />
+                    <Route path="show/:id" element={<ClassesShow />} />
                   </Route>
                 </Route>
               </Routes>
