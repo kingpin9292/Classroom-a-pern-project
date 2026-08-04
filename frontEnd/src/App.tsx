@@ -9,7 +9,7 @@ import { Toaster } from "./components/refine-ui/notification/toaster";
 import { useNotificationProvider } from "./components/refine-ui/notification/use-notification-provider";
 import { ThemeProvider } from "./components/refine-ui/theme/theme-provider";
 
-import { BookOpen, Building2, ClipboardCheck, GraduationCap, Home } from "lucide-react";
+import { BookOpen, Building2, ClipboardCheck, GraduationCap, Home, Users } from "lucide-react";
 import { Layout } from "./components/refine-ui/layout/layout";
 import Dashboard from "./pages/dashboard";
 import SubjectList from "./pages/subjects/list";
@@ -26,6 +26,8 @@ import DepartmentsShow from "./pages/departments/show";
 import EnrollmentConfirm from "./pages/enrollments/confirm";
 import EnrollmentCreate from "./pages/enrollments/create";
 import EnrollmentsJoin from "./pages/enrollments/join";
+import FacultyList from "./pages/faculty/list";
+import FacultyShow from "./pages/faculty/show";
 
 function App() {
   return (
@@ -72,6 +74,15 @@ function App() {
                     icon: <Building2 />,
                   },
                 },
+                {
+                  name: "users",
+                  list: "/faculty",
+                  show: "/faculty/show/:id",
+                  meta: {
+                    label: "Faculty",
+                    icon: <Users />,
+                  },
+                },
 
                 {
                   name: "enrollments",
@@ -114,6 +125,11 @@ function App() {
                     <Route index element={<DepartmentsList />} />
                     <Route path="create" element={<DepartmentsCreate />} />
                     <Route path="show/:id" element={<DepartmentsShow />} />
+                  </Route>
+
+                  <Route path="faculty">
+                    <Route index element={<FacultyList />} />
+                    <Route path="show/:id" element={<FacultyShow />} />
                   </Route>
 
                   <Route path="enrollments">
