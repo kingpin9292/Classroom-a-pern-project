@@ -98,8 +98,40 @@ const subjectRelations = relations(subjects, ({ one, many }) => ({
   }),
 }));
 
+const classesRelations = relations(classes, ({ one, many }) => ({
+  subject: one(subjects, {
+    fields: [classes.subjectId],
+    references: [subjects.id],
+  }),
+
+  teacher: one(user, {
+    fields: [classes.teacherId],
+    references: [user.id],
+  }),
+
+  enrollments: many(enrollments),
+}));
+
+const enrollmentReltions = relations(enrollments, ({ one }) => ({
+  student: one(user, {
+    fields: [enrollments.studentId],
+    references: [user.id],
+  }),
+
+  class: one(classes, {
+    fields: [enrollments.classId],
+    references: [classes.id],
+  }),
+}));
+
 export type Department = typeof departments.$inferSelect;
 export type NewDepartment = typeof departments.$inferInsert;
 
 export type Subject = typeof subjects.$inferSelect;
 export type NewSubject = typeof subjects.$inferInsert;
+
+export type Class = typeof classes.$inferSelect;
+export type NewClass = typeof classes.$inferInsert;
+
+export type Enrollment = typeof enrollments.$inferSelect;
+export type NewEnrollment = typeof enrollments.$inferInsert;

@@ -2,7 +2,6 @@ import { authClient } from "@/lib/auth-client";
 import { SignUpPayload, User } from "@/types";
 import type { AuthProvider } from "@refinedev/core";
 import { email, success } from "better-auth";
-import { tr } from "zod/v4/locales";
 
 export const authProvider: AuthProvider = {
   register: async ({ email, password, name, role, image, imageCldPubId }: SignUpPayload) => {
