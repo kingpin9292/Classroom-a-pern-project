@@ -7,9 +7,9 @@ export const authProvider: AuthProvider = {
   register: async ({ email, password, name, role, image, imageCldPubId }: SignUpPayload) => {
     try {
       const { data, error } = await authClient.signUp.email({
-        name,
         email,
         password,
+        name,
         image,
         role,
         imageCldPubId,
