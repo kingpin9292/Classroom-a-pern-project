@@ -38,12 +38,17 @@ export const SignUpForm = () => {
     defaultValues: { email: "", password: "", name: "", role: UserRole.STUDENT, image: "", imageCldPubId: "" },
   });
 
-  const imagePubId = form.watch("imageCldPubId");
+  const imagePublicId = form.watch("imageCldPubId");
 
   const onSubmit = async (values: RegisterFormValues) => {
     try {
       register(
-        { ...values, name: values.name, image: values.image, imageCldPubId: values.imageCldPubId || undefined },
+        {
+          ...values,
+          name: values.name,
+          image: values.image || undefined,
+          imageCldPubId: values.imageCldPubId || undefined,
+        },
         {
           onSuccess: (data) => {
             if (data.success === false) {
@@ -55,7 +60,7 @@ export const SignUpForm = () => {
             toast.success("Account created successfully", {
               richColors: true,
             });
-            form.reset;
+            form.reset();
           },
         },
       );
@@ -70,13 +75,13 @@ export const SignUpForm = () => {
   return (
     <div className="sign-up">
       <div className="logo">
-        <img src="/logo.svg" alt="Logo" />
+        <img src="/logo.png" alt="Logo" />
       </div>
 
       <Card className="card">
         <CardHeader className="header">
-          <CardTitle>Register</CardTitle>
-          <CardDescription>Create an account to get started</CardDescription>
+          <CardTitle className="title">Register</CardTitle>
+          <CardDescription className="description">Create an account to get started</CardDescription>
         </CardHeader>
 
         <CardContent className="content">
@@ -119,7 +124,7 @@ export const SignUpForm = () => {
                     <FormLabel>Profile Photo</FormLabel>
                     <FormControl>
                       <UploadWidget
-                        value={field.value ? { url: field.value, publicId: imagePubId ?? "" } : null}
+                        value={field.value ? { url: field.value, publicId: imagePublicId ?? "" } : null}
                         onChange={(file) => {
                           if (file) {
                             field.onChange(file.url);
@@ -183,11 +188,10 @@ export const SignUpForm = () => {
                   </FormItem>
                 )}
               />
+              <Button type="submit" size="lg" className="submit" disabled={form.formState.isSubmitting || isRegistering}>
+                {form.formState.isSubmitting || isRegistering ? "Creating Account..." : "Create Account"}
+              </Button>
             </form>
-
-            <Button type="submit" size="lg" className="submit" disabled={form.formState.isSubmitting || isRegistering}>
-              {form.formState.isSubmitting || isRegistering ? "Creating Account..." : "Create Account"}
-            </Button>
           </Form>
         </CardContent>
 

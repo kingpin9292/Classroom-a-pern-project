@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { UploadWidgetProps, UploadWidgetValue } from "@/types";
-import { Trash, UploadCloud } from "lucide-react";
-import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET, MAX_FILE_SIZE } from "@/constants";
+import { UploadCloud } from "lucide-react";
+import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "@/constants";
 
 const UploadWidget = ({ value = null, onChange, disabled = false }: UploadWidgetProps) => {
   const widgetRef = useRef<CloudinaryWidget | null>(null);
@@ -54,7 +54,11 @@ const UploadWidget = ({ value = null, onChange, disabled = false }: UploadWidget
   }, []);
 
   const openWidget = () => {
-    if (!disabled) widgetRef.current?.open();
+    if (!disabled && widgetRef.current) {
+      const activeElement = document.activeElement as HTMLElement | null;
+      activeElement?.blur?.();
+      window.requestAnimationFrame(() => widgetRef.current?.open());
+    }
   };
 
   return (
@@ -64,26 +68,20 @@ const UploadWidget = ({ value = null, onChange, disabled = false }: UploadWidget
           <img src={preview.url} alt="Uploaded file" />
         </div>
       ) : (
-        <div
+        <button
+          type="button"
           className="upload-dropzone"
-          role="button"
-          tabIndex={0}
           onClick={openWidget}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              openWidget();
-            }
-          }}
+          disabled={disabled}
         >
           <div className="upload-prompt">
             <UploadCloud className="icon" />
             <div>
-              <p>CLick to upload photo</p>
+              <p>Click to upload photo</p>
               <p>PNG, JPG upto 5MB</p>
             </div>
           </div>
-        </div>
+        </button>
       )}
     </div>
   );

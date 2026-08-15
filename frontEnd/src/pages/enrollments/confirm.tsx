@@ -58,7 +58,7 @@ const EnrollmentConfirm = () => {
 
         <CardContent>
           <p className="text-sm text-muted-foreground">You have been enrolled successfully.</p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 pt-2">
             {enrollment.department && <Badge variant="secondary">{enrollment.department.name}</Badge>}
             {enrollment.subject && <Badge>{enrollment.subject?.name}</Badge>}
             {enrollment.class && <Badge>{enrollment.class?.name}</Badge>}
@@ -71,19 +71,19 @@ const EnrollmentConfirm = () => {
           <CardTitle>Class Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <div>
+          <div className="mb-2">
             <p className="text-sm text-muted-foreground">Class</p>
             <p className="text-base font-semibold">{enrollment.class?.name ?? "Unknown"}</p>
           </div>
           <Separator />
-          <div>
-            <p className="text-sm text-muted-foreground">Teacher</p>
+          <div className="mb-4">
+            <p className="text-sm text-muted-foreground my-2">Teacher</p>
             <p className="text-base font-semibold">{enrollment.teacher?.name ?? "Unknown"}</p>
             <p className="text-xs text-muted-foreground">{enrollment.teacher?.email ?? "No email"}</p>
           </div>
           <Separator />
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 mt-2">
             <Button onClick={() => navigate("/classes")}>View Classes</Button>
             {enrollment.class?.id && (
               <Button onClick={() => navigate(`/classes/show/${enrollment.class?.id}`)}>Go to class</Button>
