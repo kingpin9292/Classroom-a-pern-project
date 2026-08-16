@@ -75,7 +75,7 @@ export const SignUpForm = () => {
   return (
     <div className="sign-up">
       <div className="logo">
-        <img src="/logo.png" alt="Logo" />
+        <img src="/classroom.svg" alt="Logo" />
       </div>
 
       <Card className="card">
@@ -188,7 +188,12 @@ export const SignUpForm = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" size="lg" className="submit" disabled={form.formState.isSubmitting || isRegistering}>
+              <Button
+                type="submit"
+                size="lg"
+                className="submit"
+                disabled={form.formState.isSubmitting || isRegistering}
+              >
                 {form.formState.isSubmitting || isRegistering ? "Creating Account..." : "Create Account"}
               </Button>
             </form>

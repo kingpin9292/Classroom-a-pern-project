@@ -1,11 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,12 +17,7 @@ import {
   useSidebar as useShadcnSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import {
-  useLink,
-  useMenu,
-  useRefineOptions,
-  type TreeMenuItem,
-} from "@refinedev/core";
+import { useLink, useMenu, useRefineOptions, type TreeMenuItem } from "@refinedev/core";
 import { ChevronRight, ListIcon } from "lucide-react";
 import React from "react";
 
@@ -52,15 +43,11 @@ export function Sidebar() {
           {
             "px-3": open,
             "px-1": !open,
-          }
+          },
         )}
       >
         {menuItems.map((item: TreeMenuItem) => (
-          <SidebarItem
-            key={item.key || item.name}
-            item={item}
-            selectedKey={selectedKey}
-          />
+          <SidebarItem key={item.key || item.name} item={item} selectedKey={selectedKey} />
         ))}
       </ShadcnSidebarContent>
     </ShadcnSidebar>
@@ -112,7 +99,7 @@ function SidebarItemGroup({ item, selectedKey }: MenuItemProps) {
             "opacity-100": open,
             "pointer-events-none": !open,
             "pointer-events-auto": open,
-          }
+          },
         )}
       >
         {getDisplayName(item)}
@@ -120,11 +107,7 @@ function SidebarItemGroup({ item, selectedKey }: MenuItemProps) {
       {children && children.length > 0 && (
         <div className={cn("flex", "flex-col")}>
           {children.map((child: TreeMenuItem) => (
-            <SidebarItem
-              key={child.key || child.name}
-              item={child}
-              selectedKey={selectedKey}
-            />
+            <SidebarItem key={child.key || child.name} item={child} selectedKey={selectedKey} />
           ))}
         </div>
       )}
@@ -144,7 +127,7 @@ function SidebarItemCollapsible({ item, selectedKey }: MenuItemProps) {
         "text-muted-foreground",
         "transition-transform",
         "duration-200",
-        "group-data-[state=open]:rotate-90"
+        "group-data-[state=open]:rotate-90",
       )}
     />
   );
@@ -156,11 +139,7 @@ function SidebarItemCollapsible({ item, selectedKey }: MenuItemProps) {
       </CollapsibleTrigger>
       <CollapsibleContent className={cn("ml-6", "flex", "flex-col", "gap-2")}>
         {children?.map((child: TreeMenuItem) => (
-          <SidebarItem
-            key={child.key || child.name}
-            item={child}
-            selectedKey={selectedKey}
-          />
+          <SidebarItem key={child.key || child.name} item={child} selectedKey={selectedKey} />
         ))}
       </CollapsibleContent>
     </Collapsible>
@@ -189,10 +168,7 @@ function SidebarItemDropdown({ item, selectedKey }: MenuItemProps) {
                   "bg-accent text-accent-foreground": isSelected,
                 })}
               >
-                <ItemIcon
-                  icon={child.meta?.icon ?? child.icon}
-                  isSelected={isSelected}
-                />
+                <ItemIcon icon={child.meta?.icon ?? child.icon} isSelected={isSelected} />
                 <span>{getDisplayName(child)}</span>
               </Link>
             </DropdownMenuItem>
@@ -223,7 +199,7 @@ function SidebarHeader() {
         "flex-row",
         "items-center",
         "justify-between",
-        "overflow-hidden"
+        "overflow-hidden",
       )}
     >
       <div
@@ -240,23 +216,19 @@ function SidebarHeader() {
           {
             "pl-3": !open,
             "pl-5": open,
-          }
+          },
         )}
       >
-        <div>{title.icon}</div>
+        <div>
+          <img src="/classroom.svg" alt="Classroom" className="w-6 h-6" />
+        </div>
         <h2
-          className={cn(
-            "text-sm",
-            "font-bold",
-            "transition-opacity",
-            "duration-200",
-            {
-              "opacity-0": !open,
-              "opacity-100": open,
-            }
-          )}
+          className={cn("text-sm", "font-bold", "transition-opacity", "duration-200", {
+            "opacity-0": !open,
+            "opacity-100": open,
+          })}
         >
-          {title.text}
+          {"Classroom"}
         </h2>
       </div>
 
@@ -347,7 +319,7 @@ function SidebarButton({
           "text-sidebar-primary-foreground": isSelected,
           "hover:text-sidebar-primary-foreground": isSelected,
         },
-        className
+        className,
       )}
       onClick={onClick}
       {...props}

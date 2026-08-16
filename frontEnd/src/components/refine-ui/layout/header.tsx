@@ -8,11 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import {
-  useActiveAuthProvider,
-  useLogout,
-  useRefineOptions,
-} from "@refinedev/core";
+import { useActiveAuthProvider, useLogout, useRefineOptions } from "@refinedev/core";
 import { LogOutIcon } from "lucide-react";
 
 export const Header = () => {
@@ -37,7 +33,7 @@ function DesktopHeader() {
         "bg-sidebar",
         "pr-3",
         "justify-end",
-        "z-40"
+        "z-40",
       )}
     >
       <ThemeToggle />
@@ -66,7 +62,7 @@ function MobileHeader() {
         "bg-sidebar",
         "pr-3",
         "justify-between",
-        "z-40"
+        "z-40",
       )}
     >
       <SidebarTrigger
@@ -92,23 +88,19 @@ function MobileHeader() {
           {
             "pl-3": !open,
             "pl-5": open,
-          }
+          },
         )}
       >
-        <div>{title.icon}</div>
+        <div>
+          <img src="/classroom.svg" alt="Classroom" className="w-6 h-6" />
+        </div>
         <h2
-          className={cn(
-            "text-sm",
-            "font-bold",
-            "transition-opacity",
-            "duration-200",
-            {
-              "opacity-0": !open,
-              "opacity-100": open,
-            }
-          )}
+          className={cn("text-sm", "font-bold", "transition-opacity", "duration-200", {
+            "opacity-0": !open,
+            "opacity-100": open,
+          })}
         >
-          {title.text}
+          {"Classroom"}
         </h2>
       </div>
 
@@ -137,9 +129,7 @@ const UserDropdown = () => {
             logout();
           }}
         >
-          <LogOutIcon
-            className={cn("text-destructive", "hover:text-destructive")}
-          />
+          <LogOutIcon className={cn("text-destructive", "hover:text-destructive")} />
           <span className={cn("text-destructive", "hover:text-destructive")}>
             {isLoggingOut ? "Logging out..." : "Logout"}
           </span>

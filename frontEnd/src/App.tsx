@@ -171,7 +171,6 @@ function App() {
               <UnsavedChangesNotifier />
               <DocumentTitleHandler />
             </Refine>
-            <DevtoolsPanel />
           </DevtoolsProvider>
         </ThemeProvider>
       </RefineKbarProvider>

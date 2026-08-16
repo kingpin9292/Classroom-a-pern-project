@@ -45,7 +45,7 @@ export const SignInForm = () => {
   return (
     <div className="sign-in">
       <div className="logo">
-        <img src="/logo.png" alt="logo" />
+        <img src="/classroom.svg" alt="logo" />
       </div>
 
       <Card className="card">
