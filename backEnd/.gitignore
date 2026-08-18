@@ -1,4 +1,7 @@
 node_modules
-env
+# Environment variables
+.env
+.env.local
+
 prac.js
 dist 

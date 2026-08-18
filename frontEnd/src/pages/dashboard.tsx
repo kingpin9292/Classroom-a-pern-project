@@ -1,10 +1,11 @@
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Department, Subject, User } from "@/types";
 import { shadow } from "@cloudinary/url-gen/actions/effect";
 import { useLink, useList } from "@refinedev/core";
 import { BookOpen, Building2, GraduationCap, Layers, ShieldCheck, Users } from "lucide-react";
 import React, { useMemo } from "react";
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { Bar, BarChart, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 type ClassListItem = {
   id: number;
@@ -225,6 +226,141 @@ const Dashboard = () => {
                 </span>
               ))}
             </div>
+          </CardContent>
+        </Card>
+        <div className="grid gap-4">
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader>
+              <CardTitle>New Classes (last 5)</CardTitle>
+            </CardHeader>
+
+            <CardContent>
+              <div className="text-3xl font-semibold">{newestClasses.length}</div>
+              <p className="text-sm text-muted-foreground">Most recent classes added</p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader>
+              <CardTitle>New Teachers (last 5)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-semibold">{newestTeachers.length}</div>
+              <p className="text-sm text-muted-foreground">Most recent teachers added</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Insights</CardTitle>
+        </CardHeader>
+
+        <CardContent>
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-muted-foreground">Subjects per Department</h3>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={subjectsByDepartment}>
+                  <XAxis dataKey="departmentName" tick={{ fontSize: 12 }} />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="totalSubjects" fill="#f97316" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-muted-foreground">Classes per Subject</h3>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={classesBySubject}>
+                  <XAxis dataKey="subjectName" tick={{ fontSize: 12 }} />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="totalClasses" fill="#0ea5e9" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card className="hover:shadow-md transition-shadow">
+          <CardHeader>
+            <CardTitle>Newest Classes</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {newestClasses.length === 0 && <p className="text-sm text-muted-foreground">No recent classes</p>}
+            {newestClasses.map((item, index) => (
+              <Link
+                key={item.id}
+                to={`/classes/show/${item.id}`}
+                className="flex items-center justify-between rounded-md border border-transparent px-3 py-2 transition-colors hover:border-primary/30 hover:bg-muted/40"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-semibold text-muted-foreground">#{index + 1}</span>
+                  <div>
+                    <p>{item.name}</p>
+                    <p>
+                      {item.subject?.name ?? "No subject"} .{""}
+                    </p>
+                  </div>
+                </div>
+                <Badge variant="secondary">New</Badge>
+              </Link>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card className="hover:shadow-md transition-shadow">
+          <CardHeader>
+            <CardTitle>Departments with Most Subjects</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {topDepartments.map((dept, index) => (
+              <div
+                key={dept.departmentId}
+                className="flex items-center justify-between rounded-md border border-transparent px-3 py-2 transition-colors hover:border-primary/30 hover:bg-muted/40"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-semibold text-muted-foreground">#{index + 1}</span>
+                  <div>
+                    <p className="text-sm font-medium">{dept.departmentName}</p>
+                    <p className="text-xs text-muted-foreground">{dept.totalSubjects}</p>
+                  </div>
+                </div>
+                <Badge>{dept.totalSubjects}</Badge>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-md transition-shadow">
+          <CardHeader>
+            <CardTitle>Subjects with Most Classes</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {topSubjects.map((subject, index) => (
+              <div
+                key={subject.subjectId}
+                className="flex items-center justify-between border rounded-md border-transparent px-3 py-2 transition-colors hover:border-primary/30 hover:bg-muted/40"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-semibold text-muted-foreground">#{index + 1}</span>
+                  <div>
+                    <p className="text-sm font-medium">{subject.subjectName}</p>
+                    <p className="text-xs text-muted-foreground">{subject.totalClasses}</p>
+                  </div>
+                </div>
+                <Badge>{subject.totalClasses}</Badge>
+              </div>
+            ))}
           </CardContent>
         </Card>
       </div>

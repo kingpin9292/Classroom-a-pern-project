@@ -17,7 +17,7 @@ import {
   useSidebar as useShadcnSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { useLink, useMenu, useRefineOptions, type TreeMenuItem } from "@refinedev/core";
+import { Link, useLink, useMenu, useRefineOptions, type TreeMenuItem } from "@refinedev/core";
 import { ChevronRight, ListIcon } from "lucide-react";
 import React from "react";
 
@@ -228,7 +228,7 @@ function SidebarHeader() {
             "opacity-100": open,
           })}
         >
-          {"Classroom"}
+          <Link to="/">Classroom</Link>
         </h2>
       </div>
 
