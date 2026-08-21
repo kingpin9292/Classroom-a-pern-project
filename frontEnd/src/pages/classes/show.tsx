@@ -2,15 +2,18 @@ import { ShowView, ShowViewHeader } from "@/components/refine-ui/views/show-view
 import { ClassDetails } from "@/types";
 import { useShow } from "@refinedev/core";
 import { useParams } from "react-router";
-import { boolean } from "zod";
 import { AdvancedImage } from "@cloudinary/react";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { bannerPhoto } from "@/lib/cloudinary";
-import { Divide } from "lucide-react";
+import { useMemo } from "react";
+import { ColumnDef } from "@tanstack/react-table";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ShowButton } from "@/components/refine-ui/buttons/show";
+import { useTable } from "@refinedev/react-table";
+import { DataTable } from "@/components/refine-ui/data-table/data-table";
 
 type ClassUser = {
   id: string;
@@ -21,11 +24,63 @@ type ClassUser = {
 };
 
 const ClassesShow = () => {
+  const { id } = useParams();
+  const classId = id ?? "";
   const { query } = useShow<ClassDetails>({
     resource: "classes",
   });
 
   const classDetails = query.data?.data;
+
+  const studentsColumns = useMemo<ColumnDef<ClassUser>[]>(
+    () => [
+      {
+        id: "name",
+        accessorKey: "name",
+        size: 240,
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2">
+            <Avatar>
+              {row.original.image && <AvatarImage src={row.original.image} alt={row.original.name} />}
+              <AvatarFallback>{getInitials(row.original.name)}</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col truncate">
+              <span className="truncate">{row.original.name}</span>
+              <span className="text-sm text-muted-foreground truncate">{row.original.email}</span>
+            </div>
+          </div>
+        ),
+      },
+
+      {
+        id: "details",
+        size: 140,
+        header: () => <p className="column-title">Details</p>,
+        cell: ({ row }) => (
+          <ShowButton resource="users" recordItemId={row.original.id} variant="outline" size="sm">
+            View
+          </ShowButton>
+        ),
+      },
+    ],
+    [],
+  );
+
+  const studentTable = useTable<ClassUser>({
+    columns: studentsColumns,
+    refineCoreProps: {
+      resource: `classes/${classId}/users`,
+
+      pagination: {
+        pageSize: 3,
+        mode: "server",
+      },
+
+      filters: {
+        permanent: [{ field: "role", operator: "eq", value: "student" }],
+      },
+    },
+  });
 
   if (query.isLoading || query.isError || !classDetails) {
     return (
@@ -138,10 +193,20 @@ const ClassesShow = () => {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Enrolled Students</CardTitle>
         </CardHeader>
-        <CardContent>{/* <DataTable table={} paginationVariant="simple" /> */}</CardContent>
+        <CardContent>
+          <DataTable table={studentTable} paginationVariant="simple" />
+        </CardContent>
       </Card>
     </ShowView>
   );
+};
+
+const getInitials = (name = "") => {
+  const parts = name.trim().split(" ").filter(Boolean);
+
+  if (parts.length === 0) return "";
+  if (parts.length === 1) return parts[0][0].toUpperCase() ?? "";
+  return `${parts[0][0] ?? ""}${parts[parts.length - 1][0] ?? ""}`.toUpperCase();
 };
 
 export default ClassesShow;

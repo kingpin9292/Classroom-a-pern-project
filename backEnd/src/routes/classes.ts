@@ -191,6 +191,16 @@ router.get("/:id/users", async (req, res) => {
             .orderBy(desc(user.createdAt))
             .limit(limitPerPage)
             .offset(offset);
+
+    res.status(200).json({
+      data: userList,
+      pagination: {
+        page: currentPage,
+        limit: limitPerPage,
+        total: Number(totalCount),
+        totalPages: Math.ceil(Number(totalCount) / limitPerPage),
+      },
+    });
   } catch (error) {
     console.error("GET /classes/:id/users error:", error);
     res.status(500).json({ error: "Failed to fetch class users" });

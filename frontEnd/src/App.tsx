@@ -169,7 +169,7 @@ function App() {
               <Toaster />
               <RefineKbar />
               <UnsavedChangesNotifier />
-              <DocumentTitleHandler />
+              <DocumentTitleHandler handler={() => "Classroom"} />
             </Refine>
           </DevtoolsProvider>
         </ThemeProvider>
