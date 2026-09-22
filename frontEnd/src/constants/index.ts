@@ -61,7 +61,13 @@ const getEnvVar = (key: string): string => {
 export const CLOUDINARY_UPLOAD_URL = getEnvVar("VITE_CLOUDINARY_UPLOAD_URL");
 export const CLOUDINARY_CLOUD_NAME = getEnvVar("VITE_CLOUDINARY_CLOUD_NAME");
 export const CLOUDINARY_UPLOAD_PRESET = getEnvVar("VITE_CLOUDINARY_UPLOAD_PRESET");
-export const BACKEND_BASE_URL = getEnvVar("VITE_BACKEND_BASE_URL");
+const backendOrigin = getEnvVar("VITE_BACKEND_BASE_URL")
+  .replace(/\/+$/, "")
+  .replace(/\/api$/, "");
+
+// All backend routes, including Better Auth, are served below `/api`.
+// Accept either the deployment origin or an existing `/api` URL in the env var.
+export const BACKEND_BASE_URL = `${backendOrigin}/api/`;
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 export const ACCESS_TOKEN_KEY = import.meta.env.VITE_ACCESS_TOKEN_KEY;
