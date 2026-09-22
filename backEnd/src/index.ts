@@ -38,6 +38,10 @@ app.get("/", (req, res) => {
   res.send("Backend server is running!");
 });
 
+app.get("/api/health", (_req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
