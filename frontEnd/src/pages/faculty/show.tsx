@@ -7,7 +7,7 @@ import { User } from "@/types";
 import { useShow } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { useMemo } from "react";
 import { useParams } from "react-router";
 
@@ -209,7 +209,7 @@ const FacultyShow = () => {
             <p className="text-sm text-muted-foreground">
               Departments tied to {user.name} based on classes and enrollments.
             </p>
-            <DataTable table={departmentsTable} paginationVariant="simple" />
+            <DataTable table={departmentsTable} />
           </CardContent>
         </Card>
 
@@ -219,7 +219,7 @@ const FacultyShow = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">Subjects associated with {user.name} in this term.</p>
-            <DataTable table={subjectsTable} paginationVariant="simple" />
+            <DataTable table={subjectsTable} />
           </CardContent>
         </Card>
       </div>

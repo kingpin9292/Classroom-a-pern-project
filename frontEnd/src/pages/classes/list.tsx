@@ -158,7 +158,7 @@ const ClassesList = () => {
       : [
           {
             field: "subject",
-            operator: "eq",
+            operator: "eq" as const,
             value: selectedSubject,
           },
         ];

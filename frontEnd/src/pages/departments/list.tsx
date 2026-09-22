@@ -105,7 +105,7 @@ const DepartmentsList = () => {
     columns: departmentColumns,
     refineCoreProps: {
       resource: "departments",
-      Pagination: {
+      pagination: {
         pageSize: 10,
         mode: "server",
       },

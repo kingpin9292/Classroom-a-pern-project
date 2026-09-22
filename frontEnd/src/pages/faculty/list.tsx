@@ -23,7 +23,7 @@ const FacultyList = () => {
         accessorKey: "name",
         size: 220,
         header: () => <p className="column-title">Name</p>,
-        cell: ({ row, getValue }) => {
+        cell: ({ row }) => {
           const name = row.original.name;
           const image = row.original.image;
 

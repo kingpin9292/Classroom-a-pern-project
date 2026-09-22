@@ -194,7 +194,7 @@ const ClassesShow = () => {
           <CardTitle>Enrolled Students</CardTitle>
         </CardHeader>
         <CardContent>
-          <DataTable table={studentTable} paginationVariant="simple" />
+          <DataTable table={studentTable} />
         </CardContent>
       </Card>
     </ShowView>
