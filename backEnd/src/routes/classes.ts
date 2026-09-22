@@ -1,6 +1,6 @@
 import express from "express";
-import { db } from "../db";
-import { classes, departments, enrollments, subjects, user } from "../db/schema/index";
+import { db } from "../db/index.js";
+import { classes, departments, enrollments, subjects, user } from "../db/schema/index.js";
 import { error, log } from "node:console";
 import { and, eq, getTableColumns, ilike, or, sql, desc } from "drizzle-orm";
 import { string } from "better-auth";

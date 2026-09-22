@@ -1,7 +1,7 @@
 import express from "express";
 import { getTableColumns } from "drizzle-orm";
-import { classes, departments, enrollments, subjects, user } from "../db/schema";
-import { db } from "../db";
+import { classes, departments, enrollments, subjects, user } from "../db/schema/index.js";
+import { db } from "../db/index.js";
 import { eq, and } from "drizzle-orm";
 const router = express.Router();
 const getEnrollmentDetails = async (enrollmentId) => {

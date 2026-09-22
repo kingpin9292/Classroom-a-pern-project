@@ -1,6 +1,6 @@
 import express from "express";
-import { db } from "../db";
-import { classes, departments, subjects, user } from "../db/schema";
+import { db } from "../db/index.js";
+import { classes, departments, subjects, user } from "../db/schema/index.js";
 import { eq, getTableColumns, sql, desc } from "drizzle-orm";
 const router = express.Router();
 // Overview counts for core entities

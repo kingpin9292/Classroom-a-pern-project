@@ -1,6 +1,6 @@
 import express from "express";
-import { db } from "../db";
-import { classes, departments, enrollments, subjects, user } from "../db/schema/index";
+import { db } from "../db/index.js";
+import { classes, departments, enrollments, subjects, user } from "../db/schema/index.js";
 import { and, eq, getTableColumns, ilike, or, sql, desc } from "drizzle-orm";
 const router = express.Router();
 router.post("/", async (require, res) => {
@@ -165,6 +165,15 @@ router.get("/:id/users", async (req, res) => {
                 .orderBy(desc(user.createdAt))
                 .limit(limitPerPage)
                 .offset(offset);
+        res.status(200).json({
+            data: userList,
+            pagination: {
+                page: currentPage,
+                limit: limitPerPage,
+                total: Number(totalCount),
+                totalPages: Math.ceil(Number(totalCount) / limitPerPage),
+            },
+        });
     }
     catch (error) {
         console.error("GET /classes/:id/users error:", error);

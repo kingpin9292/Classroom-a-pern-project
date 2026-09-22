@@ -70,4 +70,25 @@ const subjectRelations = relations(subjects, ({ one, many }) => ({
         references: [departments.id],
     }),
 }));
+const classesRelations = relations(classes, ({ one, many }) => ({
+    subject: one(subjects, {
+        fields: [classes.subjectId],
+        references: [subjects.id],
+    }),
+    teacher: one(user, {
+        fields: [classes.teacherId],
+        references: [user.id],
+    }),
+    enrollments: many(enrollments),
+}));
+const enrollmentReltions = relations(enrollments, ({ one }) => ({
+    student: one(user, {
+        fields: [enrollments.studentId],
+        references: [user.id],
+    }),
+    class: one(classes, {
+        fields: [enrollments.classId],
+        references: [classes.id],
+    }),
+}));
 //# sourceMappingURL=app.js.map
